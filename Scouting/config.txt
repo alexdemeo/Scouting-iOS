@@ -1,0 +1,115 @@
+## TEAM 4557 Scouting Program Configuration
+## Lines that begin with "##" will not be read by the program, they are considered comments
+## To you who are
+
+##
+## --------Elements--------
+## Elements are used to build the user interface in the phone app
+## Elements consist of 4 parts:
+##  1. A "Type" - Tells the phone how it should display the element and what type of data(number,text) can be stored
+##  2. "Arguments" - Gives additional information about how the phone should display the Element
+##  3. A "Description" - A short message for the phone to display before the Element, describes what the Element does
+##  4. A "Key" - A UNIQUE identifier used by the phone to tell the elements apart. THESE MUST BE UNIQUE
+
+## The Type, Description, and Key are separated by two semicolons (;;). The program will not work for only one semicolon. Two are required.
+## Thou must have two semicolons. Two shall be the number of the semicolons and the number of the semicolons shall be two.
+## Three semicolons shalt thou not have, neither shalt thou have one semicolon, excepting that thou then proceedeth to two. Four is right out.
+
+##  The possible Types along with their arguments are shown below
+## 		SEGMENTED_CONTROL 
+##          Used to give the user a choice between two or more options
+##          args=[<Selection 1, Selection 2,Selection n>]
+##			Format= SEGMENTED_CONTROL<args>;;[Title];;[Key]
+##			For example, for a segmented control with options "Yes No Try/Fail" titled "Scored Goals" would look like:
+##			SEGMENTED_CONTROL <No,Yes,Try/Fail>;;Scored Goals;;teleop_scored_goals
+##		TEXTFIELD 
+##          Allows the user to type in their own value, can be limited to just numbers through arguments
+##          args=[<keyboard type>] where type is any of the following... {decimal, number, normal}
+##			Format= TEXTFIELD<args>;;[Title];;[Key]
+##			For example, making a textfield with the title "Points Scored" would look like:
+##			TEXTFIELD<normal>;;Points Scored;;total_points_scored
+##		STEPPER
+##          Allows the user to select an integer between two numbers
+##          args=[<lower bound, upper bound>]
+##			Format= STEPPER<args>;;[Title];;[Key]
+##			For example a stepper that operated between bounds 0 and 5 inclusive titled "Boxes stacked" would look like:
+##			STEPPER <0,5>;;Boxed stacked;;teleop_boxes_stacked
+##		LABEL 
+##          Merely informative.  Use the "distinguished" style to differentiate between sections i.e. Autonomous, TeleOp, Human, etc.
+##          args=[<style, justification>] where style is any of the following... {bold, normal, distinguished} and justification is {left, center, right}
+##			Format= LABEL;;[Label Title]
+##			For example a label titled "Autonomous" that is clear by drawing lines around it would look like:
+##          Labels DO NOT have keys!
+##			LABEL <distinguished>;;"Autonomous"
+##		SWITCH 
+##          Allows the user to answer a simple Yes/No Question, multiple switches can be created in a single line
+##          args=[Title 1, title 2, title n...];;[key 1, key 2, key n...]
+##			Format= SWITCH;;args titles;;args keys
+##			For example a series of switchs with titles "Passes one", and "Passes two" would look like:
+##			SWITCH;;Passes one, Passes two;;aut_passes1, aut_passes2
+##			There are a maximum of 6 switches in a single line.
+##		SLIDER
+##          Allows the user to move a slider to select a number between two bounds
+##          args=[<lower bound, upper bound>]
+##			Format= SLIDER <args>;;Title;;key
+##			For example a slider titled "Shot accuracy" would look like:
+##			SLIDER <0,10>;;Shot Accuracy;;teleop_shot_accuracy
+##		SPACE
+##			Just a space in the form to make it more readable, if it seems necessary
+##			Will be the same height as everything else
+
+## --------PUT INTERFACE STUFF HERE--------
+
+
+LABEL 				<distinguished, center>;;				Autonomous
+SEGMENTED_CONTROL	<No,Yes>;;								Reaches defenses?;;								aut_reaches_defenses
+SEGMENTED_CONTROL 	<None,A,B,C,D,Low bar>;;				Which type of defense does the robot cross?;;	aut_crossesDefense
+SEGMENTED_CONTROL 	<No,Missed shot,Yes>;;					Does is shoot and score? (low or high goal);;	aut_shooting
+SLIDER 				<0,10>;;								Shot Accuracy;;									aut_shot_accuracy
+
+LABEL 				<distinguished, center>;;				TeleOp
+SEGMENTED_CONTROL 	<Neutral Zone, Spy>;;					Starting Positions;;							teleop_starting_position
+SEGMENTED_CONTROL 	<Portcullis,Cheval De Frise>;;			Which Category A Defense is on the Field?;;		teleop_catA_defense
+STEPPER 			<0,99>;;								Times crossed;;									teleop_catA_timesCrossed
+SEGMENTED_CONTROL 	<Moat,Ramparts>;;						Which Category B Defense is on the Field?;;		teleop_catB_defense
+STEPPER 			<0,99>;;								Times crossed;;									teleop_catB_timesCrossed
+SEGMENTED_CONTROL 	<Sallyport,Drawbridge>;;				Which Category C Defense is on the Field?;;		teleop_catC_defense
+STEPPER 			<0,99>;;								Times crossed;;									teleop_catC_timesCrossed
+SEGMENTED_CONTROL 	<Rockwall,Rough Terrain>;;				Which Category D Defense is on the Field?;;		teleop_catD_defense
+STEPPER 			<0,99>;;								Times crossed;;									teleop_catD_timesCrossed
+STEPPER 		 	<0,99>;;								Times through lowbar;;							teleop_lowbarCrossed
+SEGMENTED_CONTROL 	<No,Yes,Try/Fail>;;						Can Climb?;;									teleop_climbing
+SEGMENTED_CONTROL 	<No,Yes>;;								Is a defender bot?;;							teleop_defender_bot
+STEPPER 			<0,99>;;								Scored High Goal;;								teleop_shots_highgoal
+STEPPER 			<0,99>;;								Scored Low Goal;;								teleop_shots_lowgoal
+SLIDER 				<0,10>;;								Shot Accuracy;;									teleop_shot_accuracy
+STEPPER 			<0,99>;;								Fouls;;											teleop_fouls
+TEXTFIELD 			<number>;;								Total Points;;									teleop_total_points
+TEXTFIELD 			<normal>;;								Final Thoughts?;;								teleop_general_info
+
+SPACE
+SPACE
+SPACE
+SPACE
+
+## --------END INTERFACE STUFF--------
+
+## --------EQUATIONS--------
+##  Equations are used to determine an overall score for different parts, such as an overall score for TELEOP, or an overall score for AUTONOMOUS
+##		Add equations to the bottom of the document. To create an Equation, the arguments are
+##			@EQUATION [name]=[equation]
+##		The ['equation'] portion of the arguments must be a mathematical equation referring to "keys" created in previous elements.
+##		The keys must refer back to numerical values, so if the key is a String (such as team color), it will not work in an equation. This has the exception of Switches, where Yes is 1 and No is 0.
+##		Viable operators are the four basic operators (+, –, /, *), and parenthesis for grouping math. Exponents are not included, if you wish to use a power, key^n, do key * key * key, etc. n times
+##		For example, an equation for teleop finding an arbitrary score could look like...
+##			@EQUATION TELEOP=(teleop_boxes_scored+teleop_goals_score+(teleop_shots_attempted / 4)) / 3
+##
+##      IMPORTANT: ONLY THE FOLLOWING ELEMENTS MAY BE USED IN EQUATIONS
+##          - SEGMENTED_CONTROL - ONLY with arguments of <No,Yes,Try/Fail> Yes=1, No=0, Try/Fail=.5
+##          - TEXTFIELD - ONLY with arguments of <decimal> or <number>
+##          - STEPPER - Go crazy
+##          - SWITCH - Yes=1, No=0
+##          - SLIDER - See: STEPPER
+##      If an Element besides the ones listed above is used, the program will replace its value with 0.
+
+@EQUATION OVERALL_SCORE=(teleop_catA_timesCrossed+teleop_catB_timesCrossed+teleop_catC_timesCrossed+teleop_catD_timesCrossed+teleop_lowbarCrossed+2*teleop_shots_highgoal+teleop_shots_lowgoal)/8
